@@ -1,0 +1,51 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <button mat-icon-button (click)="toggleMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="brand">AgentGrid Airways</span>
+    <span class="spacer"></span>
+    <button mat-button routerLink="/flights/search" routerLinkActive="active">
+      <mat-icon>flight_takeoff</mat-icon>
+      <span>Rechercher un vol</span>
+    </button>
+    <button mat-button routerLink="/flights/list" routerLinkActive="active">
+      <mat-icon>list</mat-icon>
+      <span>Liste des vols</span>
+    </button>
+    <button mat-button routerLink="/booking/search" routerLinkActive="active">
+      <mat-icon>search</mat-icon>
+      <span>Mes réservations</span>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav mode="over" [(opened)]="menuOpened">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/flights/search" (click)="sidenav.close()">
+        <mat-icon matListItemIcon>flight_takeoff</mat-icon>
+        <span matListItemTitle>Rechercher un vol</span>
+      </a>
+      <a mat-list-item routerLink="/flights/list" (click)="sidenav.close()">
+        <mat-icon matListItemIcon>list</mat-icon>
+        <span matListItemTitle>Liste des vols</span>
+      </a>
+      <a mat-list-item routerLink="/flights/create" (click)="sidenav.close()">
+        <mat-icon matListItemIcon>add_circle</mat-icon>
+        <span matListItemTitle>Créer un vol</span>
+      </a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/booking/search" (click)="sidenav.close()">
+        <mat-icon matListItemIcon>search</mat-icon>
+        <span matListItemTitle>Mes réservations</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="content">
+      <ng-content></ng-content>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

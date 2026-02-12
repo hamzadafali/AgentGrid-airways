@@ -1,0 +1,49 @@
+.search-card {
+  margin-bottom: 24px;
+
+  .grid {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 16px;
+
+    &.cols-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  mat-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+
+    button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+}
+
+.results-section {
+  h2 {
+    margin-bottom: 16px;
+    color: #1976d2;
+  }
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #757575;
+  }
+}

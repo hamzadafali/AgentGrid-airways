@@ -1,0 +1,100 @@
+<mat-card class="booking-card">
+  <mat-card-header>
+    <mat-card-title>Détails de la réservation</mat-card-title>
+    <span [class]="booking.status | statusClass">{{ booking.status | status }}</span>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="details-grid">
+      <mat-card class="section-card">
+        <mat-card-subtitle>
+          <mat-icon>confirmation_number</mat-icon>
+          Réservation
+        </mat-card-subtitle>
+        <mat-card-content>
+          <div class="detail-row">
+            <strong>Référence:</strong>
+            <span>{{ booking.bookingReference }}</span>
+          </div>
+          <div class="detail-row">
+            <strong>Date de réservation:</strong>
+            <span>{{ booking.bookingDate | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="detail-row">
+            <strong>Siège:</strong>
+            <span>{{ booking.seatNumber }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="section-card">
+        <mat-card-subtitle>
+          <mat-icon>flight</mat-icon>
+          Vol
+        </mat-card-subtitle>
+        <mat-card-content>
+          <div class="detail-row">
+            <strong>Compagnie:</strong>
+            <span>{{ booking.flight.airline }}</span>
+          </div>
+          <div class="detail-row">
+            <strong>Numéro de vol:</strong>
+            <span>{{ booking.flight.flightNumber }}</span>
+          </div>
+          <div class="detail-row">
+            <strong>Trajet:</strong>
+            <span>{{ booking.flight.origin }} → {{ booking.flight.destination }}</span>
+          </div>
+          <div class="detail-row">
+            <strong>Départ:</strong>
+            <span>{{ booking.flight.departureDateTime | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="detail-row">
+            <strong>Arrivée:</strong>
+            <span>{{ booking.flight.arrivalDateTime | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="detail-row">
+            <strong>Prix:</strong>
+            <span class="price">{{ booking.flight.price | currency:'EUR':'symbol':'1.2-2' }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="section-card">
+        <mat-card-subtitle>
+          <mat-icon>person</mat-icon>
+          Passager
+        </mat-card-subtitle>
+        <mat-card-content>
+          <div class="detail-row">
+            <strong>Nom:</strong>
+            <span>{{ booking.passenger.firstName }} {{ booking.passenger.lastName }}</span>
+          </div>
+          <div class="detail-row">
+            <strong>Email:</strong>
+            <span>{{ booking.passenger.email }}</span>
+          </div>
+          <div class="detail-row">
+            <strong>Téléphone:</strong>
+            <span>{{ booking.passenger.phoneNumber }}</span>
+          </div>
+          <div class="detail-row">
+            <strong>Passeport:</strong>
+            <span>{{ booking.passenger.passportNumber }}</span>
+          </div>
+          <div class="detail-row">
+            <strong>Date de naissance:</strong>
+            <span>{{ booking.passenger.dateOfBirth | date:'dd/MM/yyyy' }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    @if (canCancel()) {
+      <button mat-raised-button color="warn" (click)="onCancel()">
+        <mat-icon>cancel</mat-icon>
+        Annuler la réservation
+      </button>
+    }
+  </mat-card-actions>
+</mat-card>

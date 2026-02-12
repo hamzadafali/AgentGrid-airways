@@ -1,0 +1,129 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Créer un nouveau vol</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="flightForm" (ngSubmit)="onSubmit()">
+        <div class="grid cols-2">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Numéro de vol</mat-label>
+            <input matInput formControlName="flightNumber" placeholder="Ex: AF123">
+            @if (flightForm.get('flightNumber')?.hasError('required') && flightForm.get('flightNumber')?.touched) {
+              <mat-error>Le numéro de vol est requis</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Compagnie aérienne</mat-label>
+            <input matInput formControlName="airline" placeholder="Ex: Air France">
+            @if (flightForm.get('airline')?.hasError('required') && flightForm.get('airline')?.touched) {
+              <mat-error>La compagnie aérienne est requise</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Ville de départ</mat-label>
+            <input matInput formControlName="origin" placeholder="Ex: Paris">
+            @if (flightForm.get('origin')?.hasError('required') && flightForm.get('origin')?.touched) {
+              <mat-error>La ville de départ est requise</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Ville d'arrivée</mat-label>
+            <input matInput formControlName="destination" placeholder="Ex: New York">
+            @if (flightForm.get('destination')?.hasError('required') && flightForm.get('destination')?.touched) {
+              <mat-error>La ville d'arrivée est requise</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Date de départ</mat-label>
+            <input matInput [matDatepicker]="departurePicker" formControlName="departureDateTime">
+            <mat-datepicker-toggle matSuffix [for]="departurePicker"></mat-datepicker-toggle>
+            <mat-datepicker #departurePicker></mat-datepicker>
+            @if (flightForm.get('departureDateTime')?.hasError('required') && flightForm.get('departureDateTime')?.touched) {
+              <mat-error>La date de départ est requise</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Heure de départ</mat-label>
+            <input matInput type="time" formControlName="departureTime">
+            @if (flightForm.get('departureTime')?.hasError('required') && flightForm.get('departureTime')?.touched) {
+              <mat-error>L'heure de départ est requise</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Date d'arrivée</mat-label>
+            <input matInput [matDatepicker]="arrivalPicker" formControlName="arrivalDateTime">
+            <mat-datepicker-toggle matSuffix [for]="arrivalPicker"></mat-datepicker-toggle>
+            <mat-datepicker #arrivalPicker></mat-datepicker>
+            @if (flightForm.get('arrivalDateTime')?.hasError('required') && flightForm.get('arrivalDateTime')?.touched) {
+              <mat-error>La date d'arrivée est requise</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Heure d'arrivée</mat-label>
+            <input matInput type="time" formControlName="arrivalTime">
+            @if (flightForm.get('arrivalTime')?.hasError('required') && flightForm.get('arrivalTime')?.touched) {
+              <mat-error>L'heure d'arrivée est requise</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre total de sièges</mat-label>
+            <input matInput type="number" formControlName="totalSeats" placeholder="Ex: 200">
+            @if (flightForm.get('totalSeats')?.hasError('required') && flightForm.get('totalSeats')?.touched) {
+              <mat-error>Le nombre total de sièges est requis</mat-error>
+            }
+            @if (flightForm.get('totalSeats')?.hasError('min')) {
+              <mat-error>Le nombre de sièges doit être supérieur à 0</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Sièges disponibles</mat-label>
+            <input matInput type="number" formControlName="availableSeats" placeholder="Ex: 150">
+            @if (flightForm.get('availableSeats')?.hasError('required') && flightForm.get('availableSeats')?.touched) {
+              <mat-error>Le nombre de sièges disponibles est requis</mat-error>
+            }
+            @if (flightForm.get('availableSeats')?.hasError('min')) {
+              <mat-error>Le nombre de sièges disponibles ne peut pas être négatif</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Prix (€)</mat-label>
+            <input matInput type="number" formControlName="price" placeholder="Ex: 450.00">
+            @if (flightForm.get('price')?.hasError('required') && flightForm.get('price')?.touched) {
+              <mat-error>Le prix est requis</mat-error>
+            }
+            @if (flightForm.get('price')?.hasError('min')) {
+              <mat-error>Le prix ne peut pas être négatif</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Statut</mat-label>
+            <mat-select formControlName="status">
+              @for (status of statuses; track status) {
+                <mat-option [value]="status">{{ status }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="actions">
+          <button mat-button type="button" routerLink="/">Annuler</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="!flightForm.valid">
+            Créer le vol
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

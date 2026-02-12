@@ -1,0 +1,42 @@
+<div class="container">
+  <mat-card class="search-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>search</mat-icon>
+        Rechercher une réservation
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Référence de réservation</mat-label>
+          <input matInput formControlName="reference" placeholder="Ex: ABC123DEF">
+          <mat-icon matPrefix>confirmation_number</mat-icon>
+          @if (searchForm.get('reference')?.hasError('required') && searchForm.get('reference')?.touched) {
+            <mat-error>La référence est requise</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="!searchForm.valid">
+            <mat-icon>search</mat-icon>
+            Rechercher
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  @if (searched) {
+    @if (booking) {
+      <app-booking-details [booking]="booking" (bookingCancelled)="onBookingCancelled()"></app-booking-details>
+    } @else if (notFound) {
+      <mat-card class="not-found">
+        <mat-card-content class="text-center">
+          <mat-icon>error_outline</mat-icon>
+          <p>Aucune réservation trouvée avec cette référence.</p>
+        </mat-card-content>
+      </mat-card>
+    }
+  }
+</div>

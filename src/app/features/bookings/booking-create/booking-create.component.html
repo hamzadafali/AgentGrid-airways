@@ -1,0 +1,171 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Nouvelle réservation</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-stepper linear #stepper>
+        <!-- Step 1: Flight Details -->
+        <mat-step [editable]="false">
+          <ng-template matStepLabel>Vol sélectionné</ng-template>
+          @if (selectedFlight) {
+            <div class="step-content">
+              <h3>Détails du vol</h3>
+              <div class="flight-summary">
+                <div class="info-row">
+                  <mat-icon>flight</mat-icon>
+                  <div>
+                    <strong>{{ selectedFlight.airline }} - Vol {{ selectedFlight.flightNumber }}</strong>
+                    <span [class]="selectedFlight.status | statusClass">{{ selectedFlight.status | status }}</span>
+                  </div>
+                </div>
+                <div class="info-row">
+                  <mat-icon>flight_takeoff</mat-icon>
+                  <div>
+                    <strong>{{ selectedFlight.origin }}</strong>
+                    <span>{{ selectedFlight.departureDateTime | date:'dd/MM/yyyy HH:mm' }}</span>
+                  </div>
+                </div>
+                <div class="info-row">
+                  <mat-icon>flight_land</mat-icon>
+                  <div>
+                    <strong>{{ selectedFlight.destination }}</strong>
+                    <span>{{ selectedFlight.arrivalDateTime | date:'dd/MM/yyyy HH:mm' }}</span>
+                  </div>
+                </div>
+                <div class="info-row">
+                  <mat-icon>euro</mat-icon>
+                  <div>
+                    <strong>Prix</strong>
+                    <span>{{ selectedFlight.price | currency:'EUR':'symbol':'1.2-2' }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="actions">
+                <button mat-raised-button color="primary" matStepperNext>
+                  Suivant
+                  <mat-icon>arrow_forward</mat-icon>
+                </button>
+              </div>
+            </div>
+          }
+        </mat-step>
+
+        <!-- Step 2: Passenger Information -->
+        <mat-step [editable]="!createdBooking">
+          <ng-template matStepLabel>Informations passager</ng-template>
+          <div class="step-content">
+            <h3>Informations du passager</h3>
+            <app-passenger-form (passengerSubmit)="onPassengerSubmit($event)"></app-passenger-form>
+            @if (selectedPassenger) {
+              <div class="actions">
+                <button mat-button matStepperPrevious>Retour</button>
+                <button mat-raised-button color="primary" matStepperNext>
+                  Suivant
+                  <mat-icon>arrow_forward</mat-icon>
+                </button>
+              </div>
+            }
+          </div>
+        </mat-step>
+
+        <!-- Step 3: Seat Selection -->
+        <mat-step [stepControl]="seatForm" [editable]="!createdBooking">
+          <ng-template matStepLabel>Sélection du siège</ng-template>
+          <div class="step-content">
+            <h3>Sélection du siège</h3>
+            <form [formGroup]="seatForm">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Numéro de siège</mat-label>
+                <input matInput formControlName="seatNumber" placeholder="Ex: 12A">
+                <mat-icon matPrefix>event_seat</mat-icon>
+                @if (seatForm.get('seatNumber')?.hasError('required') && seatForm.get('seatNumber')?.touched) {
+                  <mat-error>Le numéro de siège est requis</mat-error>
+                }
+                @if (seatForm.get('seatNumber')?.hasError('pattern')) {
+                  <mat-error>Format invalide (ex: 12A)</mat-error>
+                }
+                <mat-hint>Format: Numéro + Lettre (ex: 12A, 5B)</mat-hint>
+              </mat-form-field>
+            </form>
+            <div class="actions">
+              <button mat-button matStepperPrevious>Retour</button>
+              <button mat-raised-button color="primary" matStepperNext [disabled]="!seatForm.valid">
+                Suivant
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-step>
+
+        <!-- Step 4: Confirmation -->
+        <mat-step [editable]="false">
+          <ng-template matStepLabel>Confirmation</ng-template>
+          <div class="step-content">
+            @if (!createdBooking) {
+              <h3>Récapitulatif</h3>
+              <div class="summary">
+                <mat-card class="summary-card">
+                  <mat-card-subtitle>Vol</mat-card-subtitle>
+                  <mat-card-content>
+                    <p><strong>{{ selectedFlight?.airline }}</strong> - Vol {{ selectedFlight?.flightNumber }}</p>
+                    <p>{{ selectedFlight?.origin }} → {{ selectedFlight?.destination }}</p>
+                    <p>{{ selectedFlight?.departureDateTime | date:'dd/MM/yyyy HH:mm' }}</p>
+                  </mat-card-content>
+                </mat-card>
+
+                <mat-card class="summary-card">
+                  <mat-card-subtitle>Passager</mat-card-subtitle>
+                  <mat-card-content>
+                    <p><strong>{{ selectedPassenger?.firstName }} {{ selectedPassenger?.lastName }}</strong></p>
+                    <p>{{ selectedPassenger?.email }}</p>
+                    <p>Passeport: {{ selectedPassenger?.passportNumber }}</p>
+                  </mat-card-content>
+                </mat-card>
+
+                <mat-card class="summary-card">
+                  <mat-card-subtitle>Siège</mat-card-subtitle>
+                  <mat-card-content>
+                    <p><strong>{{ seatForm.value.seatNumber }}</strong></p>
+                  </mat-card-content>
+                </mat-card>
+
+                <mat-card class="summary-card price-card">
+                  <mat-card-subtitle>Montant total</mat-card-subtitle>
+                  <mat-card-content>
+                    <p class="total-price">{{ selectedFlight?.price | currency:'EUR':'symbol':'1.2-2' }}</p>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+              <div class="actions">
+                <button mat-button matStepperPrevious>Retour</button>
+                <button mat-raised-button color="primary" (click)="onConfirmBooking()">
+                  <mat-icon>check_circle</mat-icon>
+                  Confirmer la réservation
+                </button>
+              </div>
+            } @else {
+              <h3>Réservation confirmée!</h3>
+              <div class="confirmation-message">
+                <mat-icon class="success-icon">check_circle</mat-icon>
+                <p>Votre réservation a été créée avec succès!</p>
+                <div class="booking-reference">
+                  <strong>Référence de réservation:</strong>
+                  <span class="reference-code">{{ createdBooking.bookingReference }}</span>
+                </div>
+                <p class="info-text">Veuillez noter cette référence pour vos futurs échanges.</p>
+              </div>
+              <div class="actions">
+                <button mat-button (click)="goToHome()">Retour à l'accueil</button>
+                <button mat-raised-button color="primary" (click)="proceedToPayment()">
+                  <mat-icon>payment</mat-icon>
+                  Procéder au paiement
+                </button>
+              </div>
+            }
+          </div>
+        </mat-step>
+      </mat-stepper>
+    </mat-card-content>
+  </mat-card>
+</div>

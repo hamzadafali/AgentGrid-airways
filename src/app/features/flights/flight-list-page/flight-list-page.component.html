@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="header">
+    <mat-icon>list_alt</mat-icon>
+    <h2>Liste des vols</h2>
+  </div>
+
+  @if (loading) {
+    <mat-card class="state-card">
+      <mat-card-content>
+        <mat-icon>hourglass_top</mat-icon>
+        <p>Chargement des vols...</p>
+      </mat-card-content>
+    </mat-card>
+  } @else if (errorMessage) {
+    <mat-card class="state-card">
+      <mat-card-content>
+        <mat-icon>error_outline</mat-icon>
+        <p>{{ errorMessage }}</p>
+      </mat-card-content>
+    </mat-card>
+  } @else if (flights.length > 0) {
+    <app-flight-list [flights]="flights" (flightSelected)="onFlightSelect($event)"></app-flight-list>
+  } @else {
+    <mat-card class="state-card">
+      <mat-card-content>
+        <mat-icon>info</mat-icon>
+        <p>Aucun vol disponible pour le moment.</p>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

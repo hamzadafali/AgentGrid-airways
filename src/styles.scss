@@ -1,0 +1,137 @@
+/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+// Include Material core styles
+@include mat.core();
+
+// Define custom theme colors
+$agentgrid-primary: mat.m2-define-palette(mat.$m2-blue-palette, 700);
+$agentgrid-accent: mat.m2-define-palette(mat.$m2-orange-palette, 500);
+$agentgrid-warn: mat.m2-define-palette(mat.$m2-red-palette, 500);
+
+// Create the theme
+$agentgrid-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $agentgrid-primary,
+    accent: $agentgrid-accent,
+    warn: $agentgrid-warn,
+  ),
+  typography: mat.m2-define-typography-config(),
+  density: 0,
+));
+
+// Apply the theme
+@include mat.all-component-themes($agentgrid-theme);
+
+// Global styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #f5f5f5;
+}
+
+// Custom classes for status badges
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+
+  &.scheduled {
+    background-color: #e3f2fd;
+    color: #1976d2;
+  }
+
+  &.delayed {
+    background-color: #fff3e0;
+    color: #f57c00;
+  }
+
+  &.cancelled {
+    background-color: #ffebee;
+    color: #d32f2f;
+  }
+
+  &.completed {
+    background-color: #e8f5e9;
+    color: #388e3c;
+  }
+
+  &.pending {
+    background-color: #fff3e0;
+    color: #f57c00;
+  }
+
+  &.confirmed {
+    background-color: #e8f5e9;
+    color: #388e3c;
+  }
+}
+
+// Loading overlay
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+// Utility classes
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+// Responsive grid
+.grid {
+  display: grid;
+  gap: 16px;
+
+  &.cols-1 {
+    grid-template-columns: 1fr;
+  }
+
+  &.cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &.cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    &.cols-2, &.cols-3 {
+      grid-template-columns: 1fr;
+    }
+  }
+}

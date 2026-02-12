@@ -1,0 +1,73 @@
+<div class="container">
+  <mat-card class="search-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>flight_takeoff</mat-icon>
+        Rechercher un vol
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+        <div class="grid cols-2">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Ville de départ</mat-label>
+            <input matInput formControlName="origin" placeholder="Ex: Paris">
+            <mat-icon matPrefix>flight_takeoff</mat-icon>
+            @if (searchForm.get('origin')?.hasError('required') && searchForm.get('origin')?.touched) {
+              <mat-error>La ville de départ est requise</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Ville d'arrivée</mat-label>
+            <input matInput formControlName="destination" placeholder="Ex: New York">
+            <mat-icon matPrefix>flight_land</mat-icon>
+            @if (searchForm.get('destination')?.hasError('required') && searchForm.get('destination')?.touched) {
+              <mat-error>La ville d'arrivée est requise</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Date de départ</mat-label>
+            <input matInput [matDatepicker]="departurePicker" formControlName="departureDate">
+            <mat-datepicker-toggle matSuffix [for]="departurePicker"></mat-datepicker-toggle>
+            <mat-datepicker #departurePicker></mat-datepicker>
+            @if (searchForm.get('departureDate')?.hasError('required') && searchForm.get('departureDate')?.touched) {
+              <mat-error>La date de départ est requise</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Date de retour (optionnel)</mat-label>
+            <input matInput [matDatepicker]="returnPicker" formControlName="returnDate">
+            <mat-datepicker-toggle matSuffix [for]="returnPicker"></mat-datepicker-toggle>
+            <mat-datepicker #returnPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="!searchForm.valid">
+            <mat-icon>search</mat-icon>
+            Rechercher
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  @if (searched) {
+    <div class="results-section">
+      <h2>Résultats de recherche</h2>
+      @if (flights.length > 0) {
+        <app-flight-list [flights]="flights" (flightSelected)="onFlightSelect($event)"></app-flight-list>
+      } @else {
+        <mat-card>
+          <mat-card-content class="text-center">
+            <mat-icon>info</mat-icon>
+            <p>Aucun vol trouvé pour ces critères de recherche.</p>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

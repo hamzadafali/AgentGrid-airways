@@ -1,0 +1,61 @@
+<div class="flight-list">
+  @for (flight of flights; track flight.id) {
+    <mat-card class="flight-card">
+      <mat-card-content>
+        <div class="flight-header">
+          <div class="flight-info">
+            <h3>{{ flight.airline }}</h3>
+            <span class="flight-number">Vol {{ flight.flightNumber }}</span>
+          </div>
+          <span [class]="flight.status | statusClass">{{ flight.status | status }}</span>
+        </div>
+
+        <div class="flight-details">
+          <div class="route-info">
+            <div class="location">
+              <mat-icon>flight_takeoff</mat-icon>
+              <div>
+                <strong>{{ flight.origin }}</strong>
+                <span class="time">{{ flight.departureDateTime | date:'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+            </div>
+
+            <div class="duration">
+              <mat-icon>schedule</mat-icon>
+              <span>{{ getFlightDuration(flight.departureDateTime, flight.arrivalDateTime) }}</span>
+            </div>
+
+            <div class="location">
+              <mat-icon>flight_land</mat-icon>
+              <div>
+                <strong>{{ flight.destination }}</strong>
+                <span class="time">{{ flight.arrivalDateTime | date:'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flight-meta">
+            <div class="seats-info">
+              <mat-icon>airline_seat_recline_normal</mat-icon>
+              <span>{{ flight.availableSeats }} / {{ flight.totalSeats }} places disponibles</span>
+            </div>
+            <div class="price-info">
+              <span class="price">{{ flight.price | currency:'EUR':'symbol':'1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flight-actions">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onSelectFlight(flight)"
+            [disabled]="flight.availableSeats === 0 || flight.status === 'CANCELLED'">
+            <mat-icon>event_seat</mat-icon>
+            Réserver
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
